@@ -1,0 +1,19 @@
+---
+- name: Atualizar servidores Debian via AWX
+  hosts: debian_servers
+  become: yes
+
+  tasks:
+
+    - name: Atualizar cache
+      apt:
+        update_cache: yes
+
+    - name: Verificar se existem pacotes atualizáveis
+      command: apt list --upgradable
+      register: upgrades
+      changed_when: false
+
+    - name: Mostrar pacotes que podem ser atualizados
+      debug:
+        var: upgrades.stdout_lines
